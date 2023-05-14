@@ -1,4 +1,4 @@
-#include <cstdio>
+﻿#include <cstdio>
 #include <iostream>
 #include <conio.h>
 #include <vector>
@@ -17,13 +17,7 @@ public:
 
         Node(int k) : key(k), left(NULL), right(NULL) {}
 
-        Node& operator=(const Node& m)
-        {
-            key = m.key;
-            left = m.left;
-            right = m.right;
-            return *this;
-        }
+        
     };
     
     binary_tree() : root(NULL) {}
@@ -32,28 +26,25 @@ public:
 
     ~binary_tree()
     {
-        clear(root);
+        clear();
     }
 
     binary_tree& operator=(const binary_tree& m) 
     {
-        clear(root);
+        clear();
         root = copy(m.root);
         return *this;
     }
 
-    void clear(Node* node) 
+    void clear() 
     {
-        if (node) 
-        {
-            clear(node->left);
-            clear(node->right);
-            delete node;
-        }
+        clear_2(root);
+        root = NULL;
     }
 
     void print()
     {
+        if (root == NULL) std::cout << "Tree empty";
         print_2(root);
     }
 
@@ -84,13 +75,33 @@ private:
         return new_node;
     }
 
+    void clear_2(Node* node)
+    {
+        if (node)
+        {
+            clear_2(node->left);
+            clear_2(node->right);
+            delete node;
+        }
+    }
+
     void print_2(Node* node)
     {
         if (node)
         {
-            print_2(node->left);
-            print_2(node->right);
+            if (node->left)
+            {
+                std::cout << "( ";
+                print_2(node->left);
+                std::cout << ") ";
+            }
             std::cout << node->key << " ";
+            if (node->right)
+            {
+                std::cout << "( ";
+                print_2(node->right);
+                std::cout << ") ";
+            }
         }
     }
 
@@ -161,7 +172,7 @@ private:
 
         if (!node->right) 
         {
-            Node* temp = node->left;
+            Node* temp = node;
             node = node->left;
             delete temp;
             return node;
@@ -169,7 +180,7 @@ private:
 
         if (!node->left) 
         {
-            Node* temp = node->right;
+            Node* temp = node;
             node = node->right;
             delete temp;
             return node;
@@ -189,7 +200,7 @@ private:
             else
             {
                 node->key = temp->left->key;
-                Node* temp_2 = temp->left->right;
+                Node* temp_2 = temp->left;
                 temp->left = temp->left->right;
                 delete temp_2;
             }
@@ -375,21 +386,151 @@ std::vector<int> task(std::vector<int> V)
     return V;
 }
 
-int main()
+void test_time()
 {
+    std::cout << "time filling of tree and vector\n";
     std::cout << time_filling(1000) << "   " << vec_time_filling(1000) << std::endl;
     std::cout << time_filling(10000) << "   " << vec_time_filling(10000) << std::endl;
     std::cout << time_filling(100000) << "   " << vec_time_filling(100000) << std::endl;
 
-    std::cout << time_search(1000) * 1000000 << "   " << vec_time_search(1000) * 1000000 << std::endl;
-    std::cout << time_search(10000) * 1000000 << "   " << vec_time_search(10000) * 1000000 << std::endl;
-    std::cout << time_search(100000) * 1000000 << "   " << vec_time_search(100000) * 1000000 << std::endl;
+    std::cout << "time search of tree and vector\n";
+    std::cout << time_search(1000) << "   " << vec_time_search(1000) << std::endl;
+    std::cout << time_search(10000) << "   " << vec_time_search(10000) << std::endl;
+    std::cout << time_search(100000) << "   " << vec_time_search(100000) << std::endl;
 
-    std::cout << time_insert(1000) * 1000000 << "   " << vec_time_insert(1000) * 1000000 << std::endl;
-    std::cout << time_insert(10000) * 1000000 << "   " << vec_time_insert(10000) * 1000000 << std::endl;
-    std::cout << time_insert(100000) * 1000000 << "   " << vec_time_insert(100000) * 1000000 << std::endl;
+    std::cout << "time insert of tree and vector\n";
+    std::cout << time_insert(1000) << "   " << vec_time_insert(1000) << std::endl;
+    std::cout << time_insert(10000) << "   " << vec_time_insert(10000) << std::endl;
+    std::cout << time_insert(100000) << "   " << vec_time_insert(100000) << std::endl;
 
-    std::cout << time_erase(1000) * 1000000 << "   " << vec_time_erase(1000) * 1000000 << std::endl;
-    std::cout << time_erase(10000) * 1000000 << "   " << vec_time_erase(10000) * 1000000 << std::endl;
-    std::cout << time_erase(100000) * 1000000 << "   " << vec_time_erase(100000) * 1000000 << std::endl;
+    std::cout << "time erase of tree and vector\n";
+    std::cout << time_erase(1000) << "   " << vec_time_erase(1000) << std::endl;
+    std::cout << time_erase(10000) << "   " << vec_time_erase(10000) << std::endl;
+    std::cout << time_erase(100000) << "   " << vec_time_erase(100000) << std::endl;
+}
+
+bool test_int(char* b)
+{
+    if (*b == '-') b++;
+    if (*b == 0) return false;
+    if (*b == '0' && *(b + 1) != 0) return false;
+    while (*b)
+    {
+        if (*b < '0' || *b>'9') return false;
+        b++;
+    }
+    return true;
+}
+
+int scan()
+{
+    while (true)
+    {
+        char* str = new char[256];
+        std::cin.getline(str, 256);
+        if (test_int(str))
+        {
+            int x = atoi(str);
+            delete[] str;
+            return x;
+        }
+        else puts("Wrong data");
+        delete[]str;
+    }
+}
+
+int main()
+{
+    binary_tree Tree;
+    while (true)
+    {
+        system("cls");
+        std::cout << "1 - Add element to the tree" << std::endl;
+        std::cout << "2 - Delete element from tree" << std::endl;
+        std::cout << "3 - Task" << std::endl;
+        std::cout << "4 - Element search" << std::endl;
+        std::cout << "5 - Print" << std::endl;
+        std::cout << "6 - Delete tree" << std::endl;
+        std::cout << "7 - Time test" << std::endl;
+        std::cout << "8 - Exit" << std::endl;
+        int z = getch();
+        system("cls");
+
+        if (z == '1')
+        {
+            std::cout << "Enter value" << std::endl;
+            int value = scan();
+            if (!Tree.insert(value))
+            {
+                std::cout << "Error! Cannot add the same values to the tree" << std::endl;
+                if (getch()) z = '0';
+            }
+            system("cls");
+        }
+
+        if (z == '2')
+        {
+            std::cout << "Enter value" << std::endl;
+            int value = scan();
+            if (!Tree.erase(value))
+            {
+                std::cout << "Error! The tree does not contain such a value" << std::endl;
+                if (getch()) z = '0';
+            }
+        }
+
+        if (z == '3')
+        {
+            std::cout << "Enter the number of elements" << std::endl;
+            int number = scan();
+            std::vector<int> V(number);
+            std::cout << "Enter elements" << std::endl;
+            for (int i = 0; i < number; i++)
+            {
+                std::cout <<"V["<<i+1<<"]: ";
+                V[i] = scan();
+            }
+            std::cout << "Start Vector" << std::endl;
+            for (int i = 0; i < V.size(); i++)
+            {
+                std::cout << V[i] <<" ";
+            }
+            std::cout << "\n";
+            V = task(V);
+
+            std::cout << "End Vector" << std::endl;
+            for (int i = 0; i < V.size(); i++)
+            {
+                std::cout << V[i] << " ";
+            }
+            if (getch()) z = '0';
+        }
+
+        if (z == '4')
+        {
+            std::cout << "Enter value" << std::endl;
+            int value = scan();
+            if (Tree.contains(value)) std::cout << "The tree contains the given element" << std::endl;
+            else std::cout << "The tree does not contain this element" << std::endl;
+            if (getch()) z = '0';
+        }
+
+        if (z == '5')
+        {
+            Tree.print();
+            if (getch()) z = '0';
+        }
+
+        if (z == '6')
+        {
+            Tree.clear();
+        }
+
+        if (z == '7')
+        {
+            test_time();
+            if (getch()) z = '0';
+        }
+        if (z == '8') return 0;
+    }
 }
