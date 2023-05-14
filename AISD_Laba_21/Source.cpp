@@ -353,6 +353,28 @@ double vec_time_erase(int number)
     return result.count() / 1000;
 }
 
+std::vector<int> task(std::vector<int> V)
+{
+    binary_tree Tree;
+    int x = V.size();
+    for (int i = 0; i < x; i++)
+    {
+        if (!Tree.contains(V[i])) Tree.insert(V[i]);
+        else
+        {
+            int z = V[i];
+            while (find(V.begin(), V.end(), z) != V.end())
+            {
+                auto it = std::remove(V.begin(), V.end(), z);
+                V.erase(it, V.end());
+            }
+            i = i - 2;
+            x = V.size();
+        }
+    }
+    return V;
+}
+
 int main()
 {
     std::cout << time_filling(1000) << "   " << vec_time_filling(1000) << std::endl;
