@@ -44,6 +44,10 @@ public:
     {
         print_2(root);
     }
+    void insert(int key) 
+    {
+        insert_2(root, key);
+    }
 private:
 
     Node* root;
@@ -63,6 +67,23 @@ private:
             print_2(node->left);
             print_2(node->right);
             std::cout << node->key << " ";
+        }
+    }
+
+    bool insert_2(Node*& node, int key) {
+        if (!node) 
+        {
+            node = new Node(key);
+            return true;
+        }
+        else
+        {
+            if (key < node->key) return insert_2(node->left, key);
+            else
+            {
+                if (key > node->key) return insert_2(node->right, key);
+                else return false;
+            }
         }
     }
 };
