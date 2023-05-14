@@ -12,7 +12,16 @@ public:
         int key;
         Node* left;
         Node* right;
+
         Node(int k) : key(k), left(NULL), right(NULL) {}
+
+        Node& operator=(const Node& m)
+        {
+            key = m.key;
+            left = m.left;
+            right = m.right;
+            return *this;
+        }
     };
     
     binary_tree() : root(NULL) {}
@@ -54,6 +63,11 @@ public:
     bool contains(int key) 
     {
         return contains_2(root, key);
+    }
+
+    bool erase(int key)
+    {
+        return erase_2(root, key);
     }
 
 private:
@@ -111,6 +125,81 @@ private:
                 else return true;
             }
         }
+    }
+
+    bool erase_2(Node*& node, int key)
+    {
+        if (!node)
+        {
+            return false;
+        }
+        else
+        {
+            if (key < node->key) return erase_2(node->left, key);
+            else
+            {
+                if (key > node->key) return erase_2(node->right, key);
+                else 
+                {
+                    node = delete_node(node);
+                    return true;
+                }
+            }
+        }
+    }
+
+    Node* delete_node(Node*& node)
+    {
+        if (!node->left && !node->right) 
+        {
+            delete node;
+            node = NULL;
+            return node;
+        }
+
+        if (!node->right) 
+        {
+            Node* temp = node->left;
+            node = node->left;
+            delete temp;
+            return node;
+        }
+
+        if (!node->left) 
+        {
+            Node* temp = node->right;
+            node = node->right;
+            delete temp;
+            return node;
+        }
+
+        Node* temp = node->right;
+
+        if (temp->left != NULL)
+        {
+            while (temp->left->left != NULL) temp = temp->left;
+            if (!temp->left->right)
+            {
+                node->key = temp->left->key;
+                delete temp->left;
+                temp->left = NULL;
+            }
+            else
+            {
+                node->key = temp->left->key;
+                Node* temp_2 = temp->left->right;
+                temp->left = temp->left->right;
+                delete temp_2;
+            }
+        }
+        else
+        {
+            node->key = temp->key;
+            node->right = temp->right;
+            delete temp;
+        }
+        
+        return node;
     }
 };
 
