@@ -40,14 +40,22 @@ public:
             delete node;
         }
     }
+
     void print()
     {
         print_2(root);
     }
-    void insert(int key) 
+
+    bool insert(int key) 
     {
-        insert_2(root, key);
+        return insert_2(root, key);
     }
+
+    bool contains(int key) 
+    {
+        return contains_2(root, key);
+    }
+
 private:
 
     Node* root;
@@ -70,7 +78,8 @@ private:
         }
     }
 
-    bool insert_2(Node*& node, int key) {
+    bool insert_2(Node*& node, int key) 
+    {
         if (!node) 
         {
             node = new Node(key);
@@ -83,6 +92,23 @@ private:
             {
                 if (key > node->key) return insert_2(node->right, key);
                 else return false;
+            }
+        }
+    }
+
+    bool contains_2(Node* node, int key) 
+    {
+        if (!node)
+        {
+            return false;
+        }
+        else
+        {
+            if (key < node->key) return contains_2(node->left, key);
+            else
+            {
+                if (key > node->key) return contains_2(node->right, key);
+                else return true;
             }
         }
     }
