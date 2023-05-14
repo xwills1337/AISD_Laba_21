@@ -40,7 +40,10 @@ public:
             delete node;
         }
     }
-
+    void print()
+    {
+        print_2(root);
+    }
 private:
 
     Node* root;
@@ -51,6 +54,16 @@ private:
         new_node->left = copy(node->left);
         new_node->right = copy(node->right);
         return new_node;
+    }
+
+    void print_2(Node* node)
+    {
+        if (node)
+        {
+            print_2(node->left);
+            print_2(node->right);
+            std::cout << node->key << " ";
+        }
     }
 };
 
