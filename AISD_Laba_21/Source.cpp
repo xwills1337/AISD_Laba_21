@@ -212,7 +212,7 @@ size_t lcg()
     return x;
 }
 
-double exp_1_1(int number)
+double time_filling(int number)
 {
     auto start = std::chrono::steady_clock::now();
     for (int i = 0; i < 100; i++)
@@ -228,7 +228,7 @@ double exp_1_1(int number)
     return result.count() / 100;
 }
 
-double exp_2_1(int number)
+double time_search(int number)
 {
     binary_tree Tree;
     for (int j = 0; j < number; j++)
@@ -246,7 +246,7 @@ double exp_2_1(int number)
     return result.count()/1000;
 }
 
-double exp_3_1(int number)
+double time_insert(int number)
 {
     binary_tree Tree;
     for (int j = 0; j < number; j++)
@@ -264,7 +264,7 @@ double exp_3_1(int number)
     return result.count() / 1000;
 }
 
-double exp_4_1(int number)
+double time_erase(int number)
 {
     binary_tree Tree;
     for (int j = 0; j < number; j++)
@@ -282,21 +282,92 @@ double exp_4_1(int number)
     return result.count() / 1000;
 }
 
+double vec_time_filling(int number) 
+{
+    auto start = std::chrono::steady_clock::now();
+    for (int i = 0; i < 100; i++)
+    {
+        std::vector<int> V;
+        for (int j = 0; j < number; j++)
+        {
+            V.push_back(lcg());
+        }
+    }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> result = end - start;
+    return result.count() / 100;
+}
+
+double vec_time_search(int number)
+{
+    std::vector<int> V;
+    for (int j = 0; j < number; j++)
+    {
+        V.push_back(lcg());
+    }
+
+    auto start = std::chrono::steady_clock::now();
+    for (int i = 0; i < 1000; i++)
+    {
+        V.push_back(lcg());
+    }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> result = end - start;
+    return result.count() / 1000;
+}
+
+double vec_time_insert(int number)
+{
+    std::vector<int> V;
+    for (int j = 0; j < number; j++)
+    {
+        V.push_back(lcg());
+    }
+
+    auto start = std::chrono::steady_clock::now();
+    for (int i = 0; i < 1000; i++)
+    {
+        find(V.begin(), V.end(), lcg()) != V.end();
+    }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> result = end - start;
+    return result.count() / 1000;
+}
+
+double vec_time_erase(int number)
+{
+    std::vector<int> V;
+    for (int j = 0; j < number; j++)
+    {
+        V.push_back(lcg());
+    }
+
+    auto start = std::chrono::steady_clock::now();
+    for (int i = 0; i < 1000; i++)
+    {
+        auto it = std::remove(V.begin(), V.end(), lcg());
+        V.erase(it, V.end());
+    }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> result = end - start;
+    return result.count() / 1000;
+}
+
 int main()
 {
-    std::cout << exp_1_1(1000) << std::endl;
-    std::cout << exp_1_1(10000) << std::endl;
-    std::cout << exp_1_1(100000) << std::endl;
+    std::cout << time_filling(1000) << "   " << vec_time_filling(1000) << std::endl;
+    std::cout << time_filling(10000) << "   " << vec_time_filling(10000) << std::endl;
+    std::cout << time_filling(100000) << "   " << vec_time_filling(100000) << std::endl;
 
-    std::cout << exp_2_1(1000) * 1000000 <<std::endl;
-    std::cout << exp_2_1(10000) * 1000000 << std::endl;
-    std::cout << exp_2_1(100000) * 1000000 << std::endl;
+    std::cout << time_search(1000) * 1000000 << "   " << vec_time_search(1000) * 1000000 << std::endl;
+    std::cout << time_search(10000) * 1000000 << "   " << vec_time_search(10000) * 1000000 << std::endl;
+    std::cout << time_search(100000) * 1000000 << "   " << vec_time_search(100000) * 1000000 << std::endl;
 
-    std::cout << exp_3_1(1000) * 1000000 << std::endl;
-    std::cout << exp_3_1(10000) * 1000000 << std::endl;
-    std::cout << exp_3_1(100000) * 1000000 << std::endl;
+    std::cout << time_insert(1000) * 1000000 << "   " << vec_time_insert(1000) * 1000000 << std::endl;
+    std::cout << time_insert(10000) * 1000000 << "   " << vec_time_insert(10000) * 1000000 << std::endl;
+    std::cout << time_insert(100000) * 1000000 << "   " << vec_time_insert(100000) * 1000000 << std::endl;
 
-    std::cout << exp_4_1(1000) * 1000000 << std::endl;
-    std::cout << exp_4_1(10000) * 1000000 << std::endl;
-    std::cout << exp_4_1(100000) * 1000000 << std::endl;
+    std::cout << time_erase(1000) * 1000000 << "   " << vec_time_erase(1000) * 1000000 << std::endl;
+    std::cout << time_erase(10000) * 1000000 << "   " << vec_time_erase(10000) * 1000000 << std::endl;
+    std::cout << time_erase(100000) * 1000000 << "   " << vec_time_erase(100000) * 1000000 << std::endl;
 }
