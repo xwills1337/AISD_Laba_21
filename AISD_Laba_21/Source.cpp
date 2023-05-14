@@ -6,6 +6,7 @@
 class binary_tree
 {
 public:
+
     struct Node
     {
         int key;
@@ -15,9 +16,33 @@ public:
     };
     
     binary_tree() : root(NULL) {}
+
     binary_tree(const binary_tree& m) : root(copy(m.root)) {}
 
+    ~binary_tree()
+    {
+        clear(root);
+    }
+
+    binary_tree& operator=(const binary_tree& m) 
+    {
+        clear(root);
+        root = copy(m.root);
+        return *this;
+    }
+
+    void clear(Node* node) 
+    {
+        if (node) 
+        {
+            clear(node->left);
+            clear(node->right);
+            delete node;
+        }
+    }
+
 private:
+
     Node* root;
     Node* copy(Node* node) 
     {
