@@ -2,6 +2,7 @@
 #include<iostream>
 #include<conio.h>
 #include<vector>
+#include <ctime>
 
 class binary_tree
 {
@@ -203,9 +204,29 @@ private:
     }
 };
 
+size_t lcg() 
+{
+    static size_t x = 0;
+    x = (1021 * x + 24631) % 116640;
+    return x;
+}
 
+double exp_1_1(int number)
+{
+    double start = clock();
+    for (int i = 0; i < 100; i++)
+    {
+        binary_tree Tree;
+        for (int j = 0; j < number; j++)
+        {
+            Tree.insert(lcg());
+        }
+    }
+    double end = clock();
+    return (end - start) / 100;
+}
 
 int main()
 {
-
+    std::cout << exp_1_1(10000) << " milliseconds";
 }
