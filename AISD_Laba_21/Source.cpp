@@ -1,8 +1,9 @@
-#include<cstdio>
-#include<iostream>
-#include<conio.h>
-#include<vector>
-#include <ctime>
+#include <cstdio>
+#include <iostream>
+#include <conio.h>
+#include <vector>
+#include <time.h>
+#include <chrono>
 
 class binary_tree
 {
@@ -213,7 +214,7 @@ size_t lcg()
 
 double exp_1_1(int number)
 {
-    double start = clock();
+    auto start = std::chrono::steady_clock::now();
     for (int i = 0; i < 100; i++)
     {
         binary_tree Tree;
@@ -222,11 +223,80 @@ double exp_1_1(int number)
             Tree.insert(lcg());
         }
     }
-    double end = clock();
-    return (end - start) / 100;
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> result = end - start;
+    return result.count() / 100;
+}
+
+double exp_2_1(int number)
+{
+    binary_tree Tree;
+    for (int j = 0; j < number; j++)
+    {
+        Tree.insert(lcg());
+    }
+    auto start = std::chrono::steady_clock::now();
+
+    for (int i = 0; i < 1000; i++)
+    {
+        if(!Tree.contains(lcg()));
+    }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> result = end - start;
+    return result.count()/1000;
+}
+
+double exp_3_1(int number)
+{
+    binary_tree Tree;
+    for (int j = 0; j < number; j++)
+    {
+        Tree.insert(lcg());
+    }
+    auto start = std::chrono::steady_clock::now();
+
+    for (int i = 0; i < 1000; i++)
+    {
+        if (!Tree.insert(lcg()));
+    }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> result = end - start;
+    return result.count() / 1000;
+}
+
+double exp_4_1(int number)
+{
+    binary_tree Tree;
+    for (int j = 0; j < number; j++)
+    {
+        Tree.insert(lcg());
+    }
+    auto start = std::chrono::steady_clock::now();
+
+    for (int i = 0; i < 1000; i++)
+    {
+        if (!Tree.erase(lcg()));
+    }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> result = end - start;
+    return result.count() / 1000;
 }
 
 int main()
 {
-    std::cout << exp_1_1(10000) << " milliseconds";
+    std::cout << exp_1_1(1000) << std::endl;
+    std::cout << exp_1_1(10000) << std::endl;
+    std::cout << exp_1_1(100000) << std::endl;
+
+    std::cout << exp_2_1(1000) * 1000000 <<std::endl;
+    std::cout << exp_2_1(10000) * 1000000 << std::endl;
+    std::cout << exp_2_1(100000) * 1000000 << std::endl;
+
+    std::cout << exp_3_1(1000) * 1000000 << std::endl;
+    std::cout << exp_3_1(10000) * 1000000 << std::endl;
+    std::cout << exp_3_1(100000) * 1000000 << std::endl;
+
+    std::cout << exp_4_1(1000) * 1000000 << std::endl;
+    std::cout << exp_4_1(10000) * 1000000 << std::endl;
+    std::cout << exp_4_1(100000) * 1000000 << std::endl;
 }
